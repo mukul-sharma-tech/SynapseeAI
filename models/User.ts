@@ -32,6 +32,9 @@ export interface IUser extends mongoose.Document {
   companyName: string;
   resetPasswordToken?: string;
   resetPasswordExpiry?: Date;
+  emailVerified?: boolean;
+  emailVerificationToken?: string;
+  emailVerificationExpiry?: Date;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -43,6 +46,10 @@ const UserSchema = new Schema<IUser>(
 
     resetPasswordToken: String,
     resetPasswordExpiry: Date,
+
+    emailVerified: { type: Boolean, default: false },
+    emailVerificationToken: String,
+    emailVerificationExpiry: Date,
   },
   { timestamps: true }
 );

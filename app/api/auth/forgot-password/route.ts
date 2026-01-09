@@ -55,6 +55,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import crypto from "crypto";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -88,15 +89,18 @@ export async function POST(req: Request) {
     user.resetPasswordExpiry = new Date(Date.now() + 15 * 60 * 1000);
     await user.save();
 
-    console.log(
-      `RESET LINK: ${process.env.NEXTAUTH_URL}/reset-password?token=${token}`
-    );
+    // Send password reset email
+    const emailResult = await sendPasswordResetEmail(user.email, token);
+    if (!emailResult.success) {
+      console.error("Failed to send password reset email:", emailResult.error);
+      return NextResponse.json(
+        { message: "Failed to send reset email" },
+        { status: 500 }
+      );
+    }
 
-    // For development/testing: return the token to auto-redirect
-    // In production, you would send this via email instead
     return NextResponse.json({
-      message: "Password reset link sent",
-      token: token, // This enables auto-redirect in the frontend
+      message: "Password reset link sent to your email",
     });
   } catch {
     return NextResponse.json(
