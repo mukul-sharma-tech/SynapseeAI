@@ -196,7 +196,7 @@ export default function HomePage() {
 
         <h1 className="text-4xl md:text-5xl font-semibold tracking-tight
           text-slate-900 dark:text-slate-100">
-          Welcome to SynopseeAI
+          Welcome to Synapsee-AI
         </h1>
 
         <p className="mt-6 text-lg max-w-xl mx-auto
